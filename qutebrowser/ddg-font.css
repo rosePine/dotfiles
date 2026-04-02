@@ -1,0 +1,16 @@
+/* Target the body and specific DDG classes to override their font stack */
+body, 
+.zcm-wrapper, 
+.result__title, 
+.result__snippet, 
+.msg__title,
+#search_form_input_homepage,
+#search_form_input {
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+}
+
+/* Optional: Make the search results slightly cleaner */
+.result__title .result__a {
+    font-weight: 650 !important;
+}
+
