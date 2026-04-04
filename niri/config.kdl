@@ -277,7 +277,7 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-sh-at-startup "qs -c noctalia-shell"
-spawn-at-startup "qutebrowser"
+spawn-at-startup "google-chrome"
 spawn-at-startup "teams-for-linux"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
@@ -322,7 +322,7 @@ workspace "󰍉" {
 workspace "󰻞" {
 }
 window-rule{
-	match title="qutebrowser"
+	match title="google-chrome"
 	open-on-workspace "󰍉"
 	open-maximized true
 }

@@ -5,18 +5,12 @@ require 'autocommands'
 local root = vim.uv.cwd()
 local version = '5.1'
 
-local root = vim.uv.cwd()
-local version = '5.1'
-
--- Script path (where your .lua files are)
 package.path = table.concat({
   root .. '/lua_modules/share/lua/' .. version .. '/?.lua',
   root .. '/lua_modules/share/lua/' .. version .. '/?/init.lua',
   package.path,
 }, ';')
 
--- Binary path (where your .so files are)
--- Added lib64 patterns specifically
 package.cpath = table.concat({
   root .. '/lua_modules/lib64/lua/' .. version .. '/?.so',
   root .. '/lua_modules/lib64/lua/' .. version .. '/?/core.so',
@@ -437,10 +431,10 @@ require('lazy').setup({
       },
       appearance = {
         nerd_font_variant = 'mono',
+        highlight_ns = vim.api.nvim_create_namespace 'blink_cmp',
       },
 
       completion = {
-        preselect = false, -- Don't auto-select first item visually
         documentation = { auto_show = true, auto_show_delay_ms = 500 },
         list = { selection = { preselect = false, auto_insert = true } },
       },
