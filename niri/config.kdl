@@ -322,7 +322,7 @@ workspace "󰍉" {
 workspace "󰻞" {
 }
 window-rule{
-	match title="google-chrome"
+	match title="google-chrome-canary"
 	open-on-workspace "󰍉"
 	open-maximized true
 }
@@ -643,3 +643,4 @@ gestures {
         off
     }
 }
+include "./animation/burn-ashes.kdl"

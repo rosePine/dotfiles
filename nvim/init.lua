@@ -282,7 +282,12 @@ require('lazy').setup({
 
       vim.diagnostic.config {
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
+        float = {
+          border = 'rounded',
+          source = 'always', -- Shows the full name (basedpyright) in the popup
+          header = '', -- Removes the "Diagnostics:" header for a cleaner look
+          prefix = '',
+        },
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = vim.g.have_nerd_font and {
           text = {
@@ -293,16 +298,20 @@ require('lazy').setup({
           },
         } or {},
         virtual_text = {
-          source = 'if_many',
+          source = false,
           spacing = 2,
           format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            local sources = {
+              ['basedpyright'] = 'b-pyri',
+              ['Ruff'] = 'rf',
+              ['ty'] = 'ty',
+              ['Lua Diagnostics.'] = 'lua-d',
             }
-            return diagnostic_message[diagnostic.severity]
+            local source = sources[diagnostic.source] or diagnostic.source
+            if not source then
+              return diagnostic.message
+            end
+            return string.format('%s: %s', source, diagnostic.message)
           end,
         },
       }
@@ -314,6 +323,7 @@ require('lazy').setup({
         gopls = {},
         bashls = {},
         basedpyright = {},
+        ty = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -321,22 +331,26 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               workspace = {
-                vim.fn.expand '$VIMRUNTIME/lua',
-                vim.fn.getcwd() .. '/lua_modules/share/lua/5.1',
+                checkThirdParty = false, -- Stops annoying "Do you want to configure your work env" popups
+                library = {
+                  vim.fn.expand '$VIMRUNTIME/lua',
+                  vim.fn.getcwd() .. '/lua_modules/share/lua/5.1',
+                },
+              },
+              -- MOVED: These must be inside Lua = {}
+              hint = {
+                enable = true,
+                arrayIndex = 'Auto',
+                await = true,
+                paramName = 'All',
+                paramType = true,
+                semicolon = 'Replace',
+                setType = true,
+              },
+              type = {
+                castNumberToInteger = true,
               },
             },
-          },
-          hint = {
-            enable = true,
-            arrayIndex = 'Auto',
-            await = true,
-            paramName = 'All',
-            paramType = true,
-            semicolon = 'Replace',
-            setType = true,
-          },
-          type = {
-            castNumberToInteger = true,
           },
         },
       }
@@ -389,7 +403,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        python = { 'ruff', 'mypy' },
+        python = { 'ruff', 'ty' },
         json = { 'json-lsp', 'prettier' },
       },
     },
@@ -450,12 +464,6 @@ require('lazy').setup({
       fuzzy = { implementation = 'lua' },
       signature = { enabled = true },
     },
-  },
-  {
-    'feakuru/mypy.nvim',
-    config = function()
-      require('mypy').setup()
-    end,
   },
   {
     'folke/todo-comments.nvim',
@@ -642,4 +650,25 @@ vim.lsp.config('lua_ls', {
   },
 })
 
+vim.lsp.config('basedpyright', {
+  settings = {
+    analysis = {
+      autoSearchPaths = true,
+    },
+    pythonPath = {
+      '.venv/bin/python',
+    },
+  },
+})
+
+vim.lsp.config('ty', {
+  settings = {
+    ty = {
+      diagnosticMode = 'workspace',
+    },
+  },
+})
+
 vim.lsp.enable 'lua_ls'
+vim.lsp.enable 'basedpyright'
+vim.lsp.enable 'ty'

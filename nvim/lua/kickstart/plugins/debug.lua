@@ -146,10 +146,26 @@ return {
       {
         type = 'local-lua',
         request = 'launch',
-        name = 'start_debuging',
+        name = 'Global luarock',
         cwd = vim.uv.cwd(),
         program = {
           lua = 'lua',
+          file = '${file}',
+        },
+
+        extensionPath = vim.fn.stdpath 'data' .. '/mason/packages/local-lua-debugger-vscode/extension/',
+        -- This ensures the debugger can find its own scripts
+        scripts = {
+          vim.fn.stdpath 'data' .. '/mason/packages/local-lua-debugger-vscode/extension/debugger/lldebugger.lua',
+        },
+      },
+      {
+        type = 'local-lua',
+        request = 'launch',
+        name = 'Local luarock',
+        cwd = vim.uv.cwd(),
+        program = {
+          lua = './lua',
           file = '${file}',
         },
 

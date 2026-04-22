@@ -9,3 +9,14 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+local function vscodelaunch()
+  local path = vim.fn.getcwd() .. '/.vscode/' .. 'launch.json'
+  if vim.fn.filereadable(path) == 1 then
+    vim.cmd('edit' .. path)
+  else
+    vim.notify 'Warning: no .vscode/launch.json'
+  end
+end
+
+vim.keymap.set('n', '<leader>vl', vscodelaunch, { desc = 'Open .vscode/launch.json' })
